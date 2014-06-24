@@ -105,7 +105,7 @@ class Tag(models.Model):
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(_('name'), max_length=100, db_index=True)
+    name = models.CharField(_('name'), max_length=100, unique=True)
 
     class Meta:
         verbose_name = _('category')
