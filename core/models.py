@@ -140,10 +140,10 @@ class Post(models.Model):
         except Exception():
             pass
         context = {"title": self.title, "url": "http://fun.mitaka-g.net/post/" + str(self.pk) + "/" + self.slug + "/"}
+        with open ("/home/django/projects/fun/core/templates/core/post_email.txt", "r") as myfile:
+            t = myfile.read().replace('\n', '')
+        template = Template(t)
         for author in Author.objects.filter(receive_update=True):
-            with open ("/home/django/projects/fun/core/templates/core/post_email.txt", "r") as myfile:
-                t = myfile.read().replace('\n', '')
-            template = Template(t)
             send_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
 
     def __unicode__(self):
