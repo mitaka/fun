@@ -23,6 +23,11 @@ class PostCreateView(CreateView):
         form.instance.author = get_object_or_404(Author, username=self.request.user.username)
         return super(PostCreateView, self).form_valid(form)
 
+class PostEditView(UpdateView):
+    model = Post
+    form_class = PostForm
+    fields = ['title', 'content', 'category', 'keywords']
+
 class AuthorDetailView(DetailView):
     model = Author
 

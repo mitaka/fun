@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from core.feeds import LastPostsFeed
-from core.views import PostListView, PostDetailView, PostCreateView, AuthorDetailView, AuthorUpdateView
+from core.views import PostListView, PostDetailView, PostEditView, PostCreateView, AuthorDetailView, AuthorUpdateView
 from django.views.generic.base import TemplateView
 from registration.backends.default.views import ActivationView
 from registration.backends.default.views import RegistrationView
@@ -9,6 +9,7 @@ urlpatterns = patterns('core.views',
     url(r'^$', PostListView.as_view(), name='index'),
     url(r'^post/add/$', PostCreateView.as_view(), name='add_post'),
     url(r'^post/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', PostDetailView.as_view(), name='post'),
+    url(r'^post/edit/(?P<pk>\d+)/$', PostEditView.as_view(), name='edit_post'),
     url(r'^feed/', LastPostsFeed()),
     url(r'^profile/(?P<pk>\d+)/$', AuthorDetailView.as_view(), name='profile'),
     url(r'^profile/(?P<pk>\d+)/edit/$', AuthorUpdateView.as_view(), name='edit_profile'),

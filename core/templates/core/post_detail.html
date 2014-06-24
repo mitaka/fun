@@ -32,7 +32,7 @@
                     </div>
                     {% if post.author = user %}
                     <div class="post-content">
-                        <a href="">Редактирай</a>
+                        <a href="{% url 'edit_post' pk=post.pk %}">Редактирай</a>
                     </div>
                     {% endif %}
                 </ul>
