@@ -4,7 +4,7 @@ from django.views.generic.detail import DetailView
 
 from django.shortcuts import get_object_or_404
 
-from core.models import Post, Author
+from core.models import Post, Author, Category
 from core.forms import AuthorForm, PostForm
 
 class PostListView(ListView):
@@ -27,6 +27,10 @@ class PostEditView(UpdateView):
     model = Post
     form_class = PostForm
     fields = ['title', 'content', 'category', 'keywords']
+
+class CategoryCreateView(CreateView):
+    model = Category
+    success_url = '/'
 
 class AuthorDetailView(DetailView):
     model = Author

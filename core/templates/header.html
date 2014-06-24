@@ -8,6 +8,7 @@
         <a href="{% url 'index' %}">Начало</a>
         {% if user.is_authenticated %}
         <a href="{% url 'add_post' %}">Добавяне</a>
+        <a href="{% url 'add_category' %}">Добавяне на нова категория</a>
         <a href="{% url 'profile' pk=user.pk %}">Профил</a>
         <a href="/profile/logout/">Изход</a>
         {% else %}
