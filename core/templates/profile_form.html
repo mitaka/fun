@@ -1,0 +1,10 @@
+<form action="{% url 'profile' %}" method="post">
+{% csrf_token %}
+    {% for field in form %}
+        <div class="form-row">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+        </div>
+    {% endfor %}
+    <p><input type="submit" class="default" value="Запази" /></p>
+</form>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+{% if object_list %}
+    {% for post in object_list %}
+        <div class="post">
+            <ul>
+                <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}">{{ post.title }}</a></h2></div>
+                <ul>
+                    <div class="post-time">{{ post.date_created }}</div>
+                    <div class="post-content">
+                        {% autoescape off %}
+                        {{ post.content | linebreaks | safe }}
+                        {% endautoescape %}
+                    </div>
+                </ul>
+            </ul>
+        </div>
+        <br />
+    {% endfor %}
+
+    {% if is_paginated %}
+        <div class="pagination" style="margin-top: 20px; margin-left: -20px; ">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href= "?page={{ page_obj.previous_page_number }}">{% trans 'Newer posts' %}</a>
+                {% endif %}
+                 <span class="current"><br />
+                    {% trans 'Page' %} {{ page_obj.number }} {% trans 'from' %} {{ page_obj.paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">{% trans 'Older posts' %}</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+
+{% endif %}
+{% endblock %}

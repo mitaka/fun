@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block keywords %}
+    <meta name="Keywords" content="{{ post.keywords }}"/>
+{% endblock %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block mata_title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block content %}
+        <div class="post">
+            <ul>
+                <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}">{{ post.title }}</a></h2></div>
+                <ul>
+                    <div class="post-time">{{ post.date_created }}</div>
+                    <div class="post-content">
+                        {% autoescape off %}
+                        {{ post.content | linebreaks | safe }}
+                        {% endautoescape %}
+                    </div>
+                    <div class="post-content">
+                        Рейтинг: {% if post.rating > 0 %}{{ post.rating }}{% else %}0{% endif %}
+                        <a href="{% url 'rating_up' %}">+</a>
+                        <a href="{% url 'rating_down' %}">-</a>
+                    </div>
+                    {% if post.author = user %}
+                    <div class="post-content">
+                        <a href="">Редактирай</a>
+                    </div>
+                    {% endif %}
+                </ul>
+            </ul>
+        </div>
+{% endblock %}

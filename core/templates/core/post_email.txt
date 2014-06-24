@@ -1,0 +1,16 @@
+<html>
+<head>
+</head>
+<body>
+
+<br />
+A new post has been added. Click the following link to view it:
+
+<br />
+<a href="{{ url }}">{{ title }}</a>
+
+<br />
+This is an automated message. To unsubscribe please edit your profile settings.
+
+</body>
+</html>

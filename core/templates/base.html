@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    
+    {% block keywords %}
+    <meta name="Keywords" content=""/>
+    {% endblock %}
+    
+    {% block meta_title %}
+    <meta name="Title" content="fun"/>
+    {% endblock %}
+   
+    <meta name="robots" content="all" /> 
+    <meta name="city" content="Sofia"/>
+    <meta name="country" content="Bulgaria"/>
+    <meta name="resource-type" content="document"/>
+    <meta name="distribution" content="global"/>
+    <meta name="allow-search" content="yes"/>
+    <meta name="rating" content="general"/>
+    <meta name="audience" content="General"/>
+
+    <link rel="alternate" type="application/rss+xml" title="Latest Posts" href="/feed/" />
+    <link rel="stylesheet" href="http://static.mitaka-g.net/4c7f76a68d66e00a877bc1016f90156d/css/style.css" />
+    <link rel="stylesheet" href="http://static.mitaka-g.net/admin/admin/css/forms.css" />
+    <title>{% block title %}Fun{% endblock %}</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="menu">
+            {% include "header.html" %}
+        </div>
+        <div id="content-only">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+</body>
+</html>
