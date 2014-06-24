@@ -144,6 +144,8 @@ class Post(models.Model):
             t = myfile.read().replace('\n', '')
         template = Template(t)
         for author in Author.objects.filter(receive_update=True):
+            if author.pk == self.author.pk:
+                continue
             send_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
 
     def __unicode__(self):
