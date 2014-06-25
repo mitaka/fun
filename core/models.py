@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from unidecode import unidecode
 from django.contrib.sitemaps import ping_google
+from core.utils import send_html_mail
 import hmac
 import hashlib
 
@@ -146,7 +147,7 @@ class Post(models.Model):
         for author in Author.objects.filter(receive_update=True):
             if author.pk == self.author.pk:
                 continue
-            send_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
+            send_html_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
 
     def __unicode__(self):
         return "%s" % self.title
