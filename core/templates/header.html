@@ -13,7 +13,7 @@
         <a href="/profile/logout/">Изход</a>
         {% else %}
         <a href="{% url 'auth_login' %}">Вход</a>
-        <a href="/profile/register/">Регистрация</a>
+        <a href="{% url 'registration_register' %}">Регистрация</a>
         {% endif %}
     {% endblock %}
 </div>
