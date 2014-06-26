@@ -3,8 +3,10 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
 from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
-from core.models import Post, Author, Category
+from core.models import Post, Author, Category, Rating
 from core.forms import AuthorForm, PostForm
 
 class PostListView(ListView):
@@ -39,8 +41,14 @@ class AuthorUpdateView(UpdateView):
     model = Author
     fields = ['email', 'username', 'first_name', 'last_name', 'receive_update']
 
-def rating_up():
-    pass
+def rating_up(id=None, slug=None):
+    if id is not None and slug is not None:
+        post_obj = get_object_or_404(Post, pk=id)
+        Rating(post=post_obj, user=request.user, rating=1).save()
+    return HttpResponseRedirect(reverse('post',kwargs={"pk": id, "slug": slug}))
 
 def rating_down():
-    pass
+    if id is not None and slug is not None:
+        post_obj = get_object_or_404(Post, pk=id)
+        Rating(post=post_obj, user=request.user, rating=-1).save()
+    return HttpResponseRedirect(reverse('post',kwargs={"pk": id, "slug": slug}))
