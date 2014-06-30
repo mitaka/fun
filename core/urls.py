@@ -2,10 +2,16 @@ from django.conf.urls import patterns, include, url
 from core.feeds import LastPostsFeed
 from core.views import PostListView, PostDetailView, PostEditView, PostCreateView, CategoryCreateView,AuthorDetailView, AuthorUpdateView
 from core.forms import CaptchaRegistrationForm
+from core.sitemap import PostSitemap
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.contrib.sitemaps.views import sitemap
 from registration.backends.default.views import ActivationView
 from registration.backends.default.views import RegistrationView
+
+sitemaps = {
+    'fun': PostSitemap,
+}
 
 urlpatterns = patterns('core.views',
     url(r'^$', PostListView.as_view(), name='index'),
@@ -22,4 +28,5 @@ urlpatterns = patterns('core.views',
     url(r'^register/complete/$', TemplateView.as_view(template_name='registration/registration_complete.html'), name='registration_complete'),
     url(r'^rating/(?P<id>\d+)/up/$', 'rating_up', name='rating_up'),
     url(r'^rating/(?P<id>\d+)/down/$', 'rating_down', name='rating_down'),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps})
 )
