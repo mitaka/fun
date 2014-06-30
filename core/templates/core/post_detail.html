@@ -27,8 +27,8 @@
                     </div>
                     <div class="post-content">
                         Рейтинг: {% if post.rating > 0 %}{{ post.rating }}{% else %}0{% endif %}
-                        <a href="{% url 'rating_up' %}">+</a>
-                        <a href="{% url 'rating_down' %}">-</a>
+                        <a href="{% url 'rating_up' id=post.pk %}">+</a>
+                        <a href="{% url 'rating_down' id=post.pk %}">-</a>
                     </div>
                     {% if post.author = user %}
                     <div class="post-content">
