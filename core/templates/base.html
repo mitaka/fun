@@ -39,6 +39,9 @@
             {% include "header.html" %}
         </div>
         <div id="content-only">
+            <div>
+                {% bootstrap_messages messages %}
+            </div>
             {% block content %}{% endblock %}
         </div>
         <div id="footer">

@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
@@ -45,23 +46,27 @@ class AuthorUpdateView(UpdateView):
     fields = ['email', 'username', 'first_name', 'last_name', 'receive_update']
 
 @login_required()
-def rating_up(id=None):
-    if id is not None:
+def rating_up(request, id=None, slug=None):
+    if id is not None and slug is not None:
         post_obj = get_object_or_404(Post, pk=id)
         try:
             Rating(post=post_obj, user=request.user, rating=1).save()
             messages.success(request,_('Vote registered'))
+        except IntegrityError as e:
+            messages.warning(request, _('You already voted for this.'))
         except:
-            messages.error(request,_('Unable to register your vote'))
+            messages.error(request,_('Unable to register your vote.'))
     return HttpResponseRedirect(reverse('post',kwargs={"pk": id, "slug": slug}))
 
 @login_required()
-def rating_down(id=None):
+def rating_down(request, id=None, slug=None):
     if id is not None and slug is not None:
         post_obj = get_object_or_404(Post, pk=id)
         try:
             Rating(post=post_obj, user=request.user, rating=-1).save()
             messages.success(request,_('Vote registered'))
+        except IntegrityError as e:
+            messages.warning(request, _('You already voted for this.'))
         except:
-            messages.error(request,_('Unable to register your vote'))
+            messages.error(request,_('Unable to register your vote.'))
     return HttpResponseRedirect(reverse('post',kwargs={"pk": id, "slug": slug}))
