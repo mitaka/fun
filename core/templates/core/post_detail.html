@@ -26,7 +26,7 @@
                         {% endautoescape %}
                     </div>
                     <div class="post-content">
-                        Рейтинг: {% if post.rating > 0 %}{{ post.rating }}{% else %}0{% endif %}
+                        Рейтинг: {% if post.rating_set.count > 0 %}{{ post.rating_set.count }}{% else %}0{% endif %}
                         <a href="{% url 'rating_up' id=post.pk slug=post.slug %}">+</a>
                         <a href="{% url 'rating_down' id=post.pk slug=post.slug %}">-</a>
                     </div>
