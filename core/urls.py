@@ -28,5 +28,6 @@ urlpatterns = patterns('core.views',
     url(r'^register/complete/$', TemplateView.as_view(template_name='registration/registration_complete.html'), name='registration_complete'),
     url(r'^rating/(?P<id>\d+)/(?P<slug>[-_\w]+)/up/$', 'rating_up', name='rating_up'),
     url(r'^rating/(?P<id>\d+)/(?P<slug>[-_\w]+)/down/$', 'rating_down', name='rating_down'),
+    url(r'^search_results/', 'search', name='search'),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
 )

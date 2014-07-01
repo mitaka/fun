@@ -25,6 +25,9 @@
     {% load bootstrap3 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
 
     <link rel="alternate" type="application/rss+xml" title="Latest Posts" href="/feed/" />
 <!--    <link rel="stylesheet" href="http://static.mitaka-g.net/4c7f76a68d66e00a877bc1016f90156d/css/style.css" />

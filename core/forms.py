@@ -12,7 +12,7 @@ class AuthorForm(forms.ModelForm):
         fields = ['receive_update']
 
 class PostForm(forms.ModelForm):
-    content = forms.CharField(label=_('Content'), widget=SummernoteWidget())
+    content = forms.CharField(label=_('Content'), widget=SummernoteInplaceWidget())
 
     class Meta:
         model = Post

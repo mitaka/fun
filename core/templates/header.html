@@ -1,3 +1,4 @@
+{% load i18n %}
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -16,7 +17,7 @@
         <li class="active"><a href="{% url 'index' %}">Начало</a></li>
         {% if user.is_authenticated %}
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Действия<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="{% url 'add_post' %}">Добавяне</a></li>
             <li><a href="{% url 'add_category' %}">Добавяне на категория</a></li>
@@ -28,18 +29,18 @@
         {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form navbar-left" role="search" method="get" action="{% url 'search' %}">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" name="q" class="form-control" placeholder="Search">
           </div>
-          <button type="submit" class="btn btn-default">Submit</button>
+          <button type="submit" class="btn btn-default">{% trans 'Submit' %}</button>
         </form>
         {% if user.is_authenticated %}
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Профил<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Редактиране на профила</a></li>
-            <li><a href="#">Смяна на паролата</a></li>
+            <li><a href="{% url 'edit_profile' pk=user.pk %}">Редактиране на профила</a></li>
+            <li><a href="{% url 'password_change' %}">Смяна на паролата</a></li>
             <li class="divider"></li>
             <li><a href="/profile/logout/">Изход</a></li>
           </ul>

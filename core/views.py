@@ -9,9 +9,12 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.contrib import messages
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 from core.models import Post, Author, Category, Rating
 from core.forms import AuthorForm, PostForm
+from core.utils import get_query
 
 class PostListView(ListView):
     model = Post
@@ -70,3 +73,12 @@ def rating_down(request, id=None, slug=None):
         except:
             messages.error(request,_('Unable to register your vote.'))
     return HttpResponseRedirect(reverse('post',kwargs={"pk": id, "slug": slug}))
+
+def search(request):
+    query_string = ''
+    found_entries = None
+    if ('q' in request.GET) and request.GET['q'].strip():
+        query_string = request.GET['q']
+        entry_query = get_query(query_string, ['title', 'content',])
+        found_entries = Post.objects.filter(entry_query).order_by('-last_update')
+    return render_to_response('core/search_results.html', { 'query_string': query_string, 'found_entries': found_entries }, context_instance=RequestContext(request))
