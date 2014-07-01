@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
+from django.contrib import messages
 
 from core.models import Post, Author, Category, Rating
 from core.forms import AuthorForm, PostForm
@@ -43,15 +45,23 @@ class AuthorUpdateView(UpdateView):
     fields = ['email', 'username', 'first_name', 'last_name', 'receive_update']
 
 @login_required()
-def rating_up(id=None, slug=None):
-    if id is not None and slug is not None:
+def rating_up(id=None):
+    if id is not None:
         post_obj = get_object_or_404(Post, pk=id)
-        Rating(post=post_obj, user=request.user, rating=1).save()
+        try:
+            Rating(post=post_obj, user=request.user, rating=1).save()
+            messages.success(request,_('Vote registered'))
+        except:
+            messages.error(request,_('Unable to register your vote'))
     return HttpResponseRedirect(reverse('post',kwargs={"pk": id, "slug": slug}))
 
 @login_required()
-def rating_down():
+def rating_down(id=None):
     if id is not None and slug is not None:
         post_obj = get_object_or_404(Post, pk=id)
-        Rating(post=post_obj, user=request.user, rating=-1).save()
+        try:
+            Rating(post=post_obj, user=request.user, rating=-1).save()
+            messages.success(request,_('Vote registered'))
+        except:
+            messages.error(request,_('Unable to register your vote'))
     return HttpResponseRedirect(reverse('post',kwargs={"pk": id, "slug": slug}))
