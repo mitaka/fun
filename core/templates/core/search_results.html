@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for post in found_entries %}
+        <div class="col-md-offset-2">
+            <ul>
+                <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}">{{ post.title }}</a></h2></div>
+                <ul>
+                    <div class="post-time">{{ post.date_created }}</div>
+                    <div class="post-content">
+                        {% autoescape off %}
+                        {{ post.content | linebreaks | safe }}
+                        {% endautoescape %}
+                    </div>
+                </ul>
+            </ul>
+        </div>
+    <br />
+{% endfor %}
+{% endblock %}
