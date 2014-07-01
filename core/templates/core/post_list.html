@@ -5,7 +5,7 @@
 {% block content %}
 {% if object_list %}
     {% for post in object_list %}
-        <div class="post">
+        <div class="col-md-offset-2">
             <ul>
                 <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}">{{ post.title }}</a></h2></div>
                 <ul>

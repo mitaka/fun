@@ -1,19 +1,51 @@
-<div class="header">
-    <div class="site-title">
-        <h2><a href="{% url 'index' %}">fun.mitaka-g.net Alpha</a></h2>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'index' %}">Fun</a>
     </div>
-</div>
-<div class="menu">
-    {% block menu %}
-        <a href="{% url 'index' %}">Начало</a>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="{% url 'index' %}">Начало</a></li>
         {% if user.is_authenticated %}
-        <a href="{% url 'add_post' %}">Добавяне</a>
-        <a href="{% url 'add_category' %}">Добавяне на нова категория</a>
-        <a href="{% url 'profile' pk=user.pk %}">Профил</a>
-        <a href="/profile/logout/">Изход</a>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{% url 'add_post' %}">Добавяне</a></li>
+            <li><a href="{% url 'add_category' %}">Добавяне на категория</a></li>
+          </ul>
+        </li>
         {% else %}
-        <a href="{% url 'auth_login' %}">Вход</a>
-        <a href="{% url 'registration_register' %}">Регистрация</a>
+        <li><a href="{% url 'auth_login' %}">Вход</a></li>
+        <li><a href="{% url 'registration_register' %}">Регистрация</a></li>
         {% endif %}
-    {% endblock %}
-</div>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Профил<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Редактиране на профила</a></li>
+            <li><a href="#">Смяна на паролата</a></li>
+            <li class="divider"></li>
+            <li><a href="/profile/logout/">Изход</a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
