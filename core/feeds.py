@@ -16,3 +16,9 @@ class LastPostsFeed(Feed):
 
     def item_description(self, item):
         return item.content
+
+    def item_pubdate(self, item):
+        return item.date_created
+
+    def item_updateddate(self, item):
+        return item.last_update
