@@ -9,7 +9,7 @@
             <ul>
                 <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}">{{ post.title }}</a></h2></div>
                 <ul>
-                    <div class="post-time">{{ post.date_created }}</div>
+                    <div class="post-time">{{ post.date_created }} от {{ post.author }}</div>
                     <div class="post-content">
                         {% autoescape off %}
                         {{ post.content | linebreaks | safe }}
