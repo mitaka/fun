@@ -32,8 +32,8 @@ class AuthorUserManager(BaseUserManager):
                         is_staff=False, is_active=False, is_superuser=False,
                         last_login=now, date_joined=now, **extra_fields)
         user.set_password(password)
-        secret = bytes(user.email).encode('utf-8')
-        data = bytes(user.username).encode('utf-8')
+        secret = bytes(user.email, 'utf-8')
+        data = bytes(user.username, 'utf-8')
         digest = hmac.new(secret, data, digestmod=hashlib.sha256)
         user.registration_hash = digest.hexdigest()
         user.save(using=self._db)
