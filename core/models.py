@@ -121,7 +121,7 @@ class Post(models.Model):
     content = models.TextField()
     category = models.ForeignKey(Category)
     author = models.ForeignKey(Author)
-    date_created = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(default=timezone.now, db_index=True)
     last_update = models.DateTimeField(default=timezone.now)
     tag = models.ManyToManyField(Tag, related_name="tag_name")
     keywords = models.CharField(max_length=200)
