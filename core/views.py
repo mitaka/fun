@@ -17,7 +17,7 @@ from core.forms import AuthorForm, PostForm
 from core.utils import get_query
 
 class PostListView(ListView):
-    model = Post
+    queryset = Post.objects.select_related()
     paginate_by = 10
 
 class PostDetailView(DetailView):
