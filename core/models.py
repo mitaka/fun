@@ -147,7 +147,8 @@ class Post(models.Model):
         for author in Author.objects.filter(receive_update=True):
             if author.pk == self.author.pk:
                 continue
-            send_html_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
+            if author.is_active:
+                send_html_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
 
     def __unicode__(self):
         return "%s" % self.title
