@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load bootstrap3 %}
 {% load i18n %}
 
 {% block content %}
@@ -22,18 +22,8 @@
     {% endfor %}
 
     {% if is_paginated %}
-        <div class="pagination" style="margin-top: 20px; margin-left: -20px; ">
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href= "?page={{ page_obj.previous_page_number }}">{% trans 'Newer posts' %}</a>
-                {% endif %}
-                 <span class="current"><br />
-                    {% trans 'Page' %} {{ page_obj.number }} {% trans 'from' %} {{ page_obj.paginator.num_pages }}
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">{% trans 'Older posts' %}</a>
-                {% endif %}
-            </span>
+        <div class="col-md-offset-6">
+            {% bootstrap_pagination page_obj %}
         </div>
     {% endif %}
 
