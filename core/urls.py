@@ -9,15 +9,17 @@ from django.contrib.sitemaps.views import sitemap
 from registration.backends.default.views import ActivationView
 from registration.backends.default.views import RegistrationView
 
+from django.views.decorators.cache import cache_page
+
 sitemaps = {
     'fun': PostSitemap,
 }
 
 urlpatterns = patterns('core.views',
-    url(r'^$', PostListView.as_view(), name='index'),
+    url(r'^$', cache_page(60 * 15)(PostListView.as_view()), name='index'),
     url(r'^post/add/$', login_required(PostCreateView.as_view()), name='add_post'),
     url(r'^category/add/$', login_required(CategoryCreateView.as_view()), name='add_category'),
-    url(r'^post/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', PostDetailView.as_view(), name='post'),
+    url(r'^post/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', cache_page(60 * 15)(PostDetailView.as_view()), name='post'),
     url(r'^post/edit/(?P<pk>\d+)/$', login_required(PostEditView.as_view()), name='edit_post'),
     url(r'^feed/', LastPostsFeed()),
     url(r'^profile/(?P<pk>\d+)/$', login_required(AuthorDetailView.as_view()), name='profile'),
