@@ -2,6 +2,15 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
+{% block extra_css %}
+<style>
+    .avatar {
+        width:32px;
+        height:32px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 {% if object_list %}
     {% for post in object_list %}
