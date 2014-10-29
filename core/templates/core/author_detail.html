@@ -1,6 +1,23 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_css %}
+<style>
+    .avatar {
+        width:128px;
+        height:128px;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<a href="{% url 'edit_profile' pk=user.pk %}">Редактиране на профила</a>
-<a href="{% url 'password_change' %}">Смяна на парола</a>
+<div class="container-fluid col-md-12 col-md-offset-4">
+    <div class="pull-left">
+        <img class="img-rounded avatar" src="{{ STATIC_URL }}{{ author.avatar }}"/>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Име</label>
+        <p>{{ author.first_name }} {{ author.last_name }}</p>
+    </div>
+</div>
 {% endblock %}
