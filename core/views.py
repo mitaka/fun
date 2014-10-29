@@ -46,7 +46,7 @@ class AuthorDetailView(DetailView):
 
 class AuthorUpdateView(UpdateView):
     model = Author
-    fields = ['email', 'username', 'first_name', 'last_name', 'receive_update']
+    fields = ['email', 'username', 'first_name', 'last_name', 'receive_update', 'avatar']
 
 @login_required()
 def rating_up(request, id=None, slug=None):

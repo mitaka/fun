@@ -57,7 +57,7 @@ class Author(AbstractBaseUser, PermissionsMixin):
     receive_update = models.BooleanField(default=True)
     date_joined = models.DateTimeField(_('date joined'),default=timezone.now)
     registration_hash = models.CharField(max_length=64, blank=True)
-    avatar = models.ImageField(upload_to='avatars/', default='avatars/no-img.png')
+    avatar = models.ImageField(upload_to='avatars/', default='avatars/no-img.png', null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
