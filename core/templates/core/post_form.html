@@ -5,6 +5,7 @@
 {% block content %}
 
 <div class="col-md-offset-4 col-md-4">
+{% if user.first_name and user.last_name %}
 <form action="" method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
@@ -14,6 +15,8 @@
     </button>
     {% endbuttons %}
 </form>
+{% else %}
+<p> Моля редактирайте профила си <a href="{% url 'edit_profile' pk=user.pk %}">тук</a> преди да добавяте постове.
+{% endif %}
 </div>
-
 {% endblock %}
