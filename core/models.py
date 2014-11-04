@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.template.defaultfilters import slugify
 from django.template import Template, Context
 from django.utils.translation import ugettext_lazy as _
+from django.utils.http import urlquote
 from django.utils import timezone
 from django.core.mail import send_mail
 from unidecode import unidecode
@@ -77,7 +78,7 @@ class Author(AbstractBaseUser, PermissionsMixin):
         return "%s" % self.email
 
     def get_absolute_url(self):
-        return "/author/%s/" % urlquote(self.pk)
+        return "/profile/%s/" % urlquote(self.pk)
 
     def email_user(self, subject, message, from_email=None):
         a = self.username
