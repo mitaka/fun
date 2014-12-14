@@ -14,12 +14,13 @@
 {% block content %}
 {% if object_list %}
     {% for post in object_list %}
+    <div itemprop="blogPost" itemscope itemtype="http://schema.org/Blog">
         <div class="col-md-offset-2">
             <ul>
-                <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}">{{ post.title }}</a></h2></div>
+                <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}" rel="bookmark" itemprop="url"><span itemprop="headline">{{ post.title }}</span></a></h2></div>
                 <ul>
-                    <div class="post-time">{{ post.date_created }} от <img class="img-rounded avatar" src="{{ STATIC_URL }}{{ post.author.avatar }}"/> {{ post.author }}</div>
-                    <div class="post-content">
+                    <div class="post-time" itemprop="datePublished">{{ post.date_created }} от <img class="img-rounded avatar" src="{{ STATIC_URL }}{{ post.author.avatar }}"/> <span itemprop="author">{{ post.author }}</span></div>
+                    <div class="post-content" itemprop="text">
                         {% autoescape off %}
                         {{ post.content | linebreaks | safe }}
                         {% endautoescape %}
@@ -28,6 +29,7 @@
             </ul>
         </div>
         <br />
+    </div>
     {% endfor %}
 
     {% if is_paginated %}
