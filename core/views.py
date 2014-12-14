@@ -18,7 +18,7 @@ from core.utils import get_query
 
 class PostListView(ListView):
     queryset = Post.objects.select_related()
-    paginate_by = 10
+    paginate_by = 20
 
 class PostDetailView(DetailView):
     model = Post
