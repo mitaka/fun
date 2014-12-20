@@ -10,6 +10,8 @@ from django.core.mail import send_mail
 from unidecode import unidecode
 from django.contrib.sitemaps import ping_google
 from core.utils import send_html_mail
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 import hmac
 import hashlib
 
@@ -135,22 +137,32 @@ class Post(models.Model):
         ordering = ['-date_created']
 
     def save(self, *args, **kwargs):
+        created = False
+        if self.pk is not None:
+            created = True
+
         if self.slug == '':
             self.slug = slugify(unidecode(self.title[:255]))
+
         super(Post, self).save(*args,**kwargs)
+
         try:
             ping_google(sitemap_url='/sitemap.xml')
         except Exception():
             pass
-        context = {"title": self.title, "url": "http://fun.mitaka-g.net/post/" + str(self.pk) + "/" + self.slug + "/"}
-        with open ("/home/django/projects/fun/core/templates/core/post_email.txt", "r") as myfile:
-            t = myfile.read().replace('\n', '')
-        template = Template(t)
-        for author in Author.objects.filter(receive_update=True):
-            if author.pk == self.author.pk:
-                continue
-            if author.is_active:
-                send_html_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
+        if created:
+            context = {"title": self.title, "url": "http://fun.mitaka-g.net/post/" + str(self.pk) + "/" + self.slug + "/"}
+            with open ("/home/django/projects/fun/core/templates/core/post_email.txt", "r") as myfile:
+                t = myfile.read().replace('\n', '')
+            template = Template(t)
+            for author in Author.objects.filter(receive_update=True):
+                if author.pk == self.author.pk:
+                    continue
+                if author.is_active:
+                    send_html_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
+
+        cache_key = make_template_fragment_key('object_list')
+        cache.delete(cache_key)
 
     def __unicode__(self):
         return "%s" % self.title

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 {% load i18n %}
+{% load cache %}
 
 {% block extra_css %}
 <style>
@@ -13,6 +14,7 @@
 
 {% block content %}
 {% if object_list %}
+    {% cache 600 object_list %}
     {% for post in object_list %}
     <div itemprop="blogPost" itemscope itemtype="http://schema.org/Blog">
         <div class="col-md-offset-2">
@@ -25,13 +27,23 @@
                         {{ post.content | linebreaks | safe }}
                         {% endautoescape %}
                     </div>
+                    <div class="post-content" itemscope itemtype="aggregateRating">
+                        Рейтинг: {% if post.rating_set.count > 0 %}<span itemprop="ratingValue">{{ post.rating_set.count }}</span>{% else %}<span itemprop="ratingValue">0</span>{% endif %}
+                        <a href="{% url 'rating_up' id=post.pk slug=post.slug %}">+</a>
+                        <a href="{% url 'rating_down' id=post.pk slug=post.slug %}">-</a>
+                    </div>
+                    {% if post.author = user %}
+                    <div class="post-content">
+                        <a href="{% url 'edit_post' pk=post.pk %}">Редактирай</a>
+                    </div>
+                    {% endif %}
                 </ul>
             </ul>
         </div>
         <br />
     </div>
     {% endfor %}
-
+    {% endcache %}
     {% if is_paginated %}
         <div class="col-md-offset-6">
             {% bootstrap_pagination page_obj %}
