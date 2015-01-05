@@ -2,12 +2,41 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from django.db.models import Q
 import re
+import gearman
+import json
+import base64
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 def send_html_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None, connection=None):
     text_part = strip_tags(message)
     msg = EmailMultiAlternatives(subject, text_part, from_email, recipient_list)
     msg.attach_alternative(message, "text/html")
     return msg.send()
+
+def send_gearman_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None, host='127.0.0.1'):
+    data = {}
+    text = strip_tags(message)
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = from_email
+    msg['To'] = ",".join(recipient_list)
+    text_part = MIMEText(text, 'plain')
+    html_part = MIMEText(message, 'html')
+    msg.attach(text_part)
+    msg.attach(html_part)
+
+    data['host'] = host
+    data['message'] = msg.as_string()
+    data['subject'] = subject
+    data['auth_user'] = auth_user
+    data['auth_password'] = auth_password
+    data['to_address'] = recipient_list
+    data['from_address'] = from_email
+
+    client = gearman.Client()
+    client.add_servers('127.0.0.1:4730')
+    client.do('emailer', base64.b64encode(bytes(json.dumps(data), 'utf-8')), background=True)
 
 def normalize_query(query_string, findterms=re.compile(r'"([^"]+)"|(\S+)').findall, normspace=re.compile(r'\s{2,}').sub):
     ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
