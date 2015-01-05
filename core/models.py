@@ -9,9 +9,10 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from unidecode import unidecode
 from django.contrib.sitemaps import ping_google
-from core.utils import send_html_mail
+from core.utils import send_gearman_mail
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
+from django.conf import settings
 import hmac
 import hashlib
 
@@ -159,7 +160,7 @@ class Post(models.Model):
                 if author.pk == self.author.pk:
                     continue
                 if author.is_active:
-                    send_html_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False)
+                    send_gearman_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
 
         cache_key = make_template_fragment_key('object_list')
         cache.delete(cache_key)
