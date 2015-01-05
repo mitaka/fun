@@ -7,7 +7,7 @@
 A new post has been added. Click the following link to view it:
 
 <br />
-<a href="{{ url }}">{{ title }}</a>
+<a href="{{ url }}?utm_source=mandrill&utm_medium=email&utm_campaign=track">{{ title }}</a>
 
 <br />
 This is an automated message. To unsubscribe please edit your profile settings.
