@@ -1,0 +1,27 @@
+<div class="post">
+    <ul>
+        <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}" rel="bookmark" itemprop="url"><span itemprop="headline">{{ post.title }}</span></a></h2></div>
+        <ul>
+            <div class="post-time" itemprop="datePublished">{{ post.date_created }}</div>
+            <div class="post-content" itemprop="text">
+                {% if post.unsafe and not user.is_authenticated %}
+                    <p>Съдържанието е маркирано като "unsafe". За да видите това трябва да се <a href="{% url 'registration_register' %}">регистрирате</a> или да <a href="{% url 'auth_login' %}">влезете в профила си</a>.</p>
+                {% else %}
+                    {% autoescape off %}
+                    {{ post.content | linebreaks | safe }}
+                    {% endautoescape %}
+                {% endif %}
+            </div>
+            <div class="post-content" itemscope itemtype="aggregateRating">
+                Рейтинг: {% if post.rating_set.count > 0 %}<span itemprop="ratingValue">{{ post.rating_set.count }}</span>{% else %}<span itemprop="ratingValue">0</span>{% endif %}
+                <a href="{% url 'rating_up' id=post.pk slug=post.slug %}">+</a>
+                <a href="{% url 'rating_down' id=post.pk slug=post.slug %}">-</a>
+            </div>
+            {% if post.author = user %}
+            <div class="post-content">
+                <a href="{% url 'edit_post' pk=post.pk %}">Редактирай</a>
+            </div>
+            {% endif %}
+        </ul>
+    </ul>
+</div>

@@ -131,6 +131,7 @@ class Post(models.Model):
     tag = models.ManyToManyField(Tag, related_name="tag_name")
     keywords = models.CharField(max_length=200)
     slug = models.SlugField(max_length=255,blank=True)
+    unsafe = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _('post')

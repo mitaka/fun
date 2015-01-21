@@ -15,7 +15,10 @@ class LastPostsFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.content
+        content = item.content
+        if item.unsafe:
+            content = ''
+        return content
 
     def item_pubdate(self, item):
         return item.date_created

@@ -16,7 +16,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'category', 'keywords']
+        fields = ['title', 'content', 'category', 'keywords', 'unsafe']
 
 class CaptchaRegistrationForm(RegistrationForm):
     captcha = CaptchaField()
