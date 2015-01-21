@@ -2,7 +2,7 @@
     <ul>
         <div class="post-title"><h2><a href="{% url 'post' pk=post.pk slug=post.slug %}" rel="bookmark" itemprop="url"><span itemprop="headline">{{ post.title }}</span></a></h2></div>
         <ul>
-            <div class="post-time" itemprop="datePublished">{{ post.date_created }}</div>
+            <div class="post-time" itemprop="datePublished">{{ post.date_created }} от <img class="img-rounded avatar" src="{{ STATIC_URL }}{{ post.author.avatar }}"/> <span itemprop="author">{{ post.author }}</span></div>
             <div class="post-content" itemprop="text">
                 {% if post.unsafe and not user.is_authenticated %}
                     <p>Съдържанието е маркирано като "unsafe". За да видите това трябва да се <a href="{% url 'registration_register' %}">регистрирате</a> или да <a href="{% url 'auth_login' %}">влезете в профила си</a>.</p>
