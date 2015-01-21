@@ -99,14 +99,14 @@ class Author(AbstractBaseUser, PermissionsMixin):
             else:
                 return False
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
 class Tag(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(_('name'), max_length=50, db_index=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.name    
 
 class Category(models.Model):
@@ -117,7 +117,7 @@ class Category(models.Model):
         verbose_name = _('category')
         verbose_name_plural = _('categories')
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.name
 
 class Post(models.Model):
@@ -165,7 +165,7 @@ class Post(models.Model):
         cache_key = make_template_fragment_key('object_list')
         cache.delete(cache_key)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.title
 
     def get_absolute_url(self):
