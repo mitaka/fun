@@ -12,6 +12,9 @@ from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
+
 from core.models import Post, Author, Category, Rating
 from core.forms import AuthorForm, PostForm
 from core.utils import get_query
@@ -55,6 +58,8 @@ def rating_up(request, id=None, slug=None):
         try:
             Rating(post=post_obj, user=request.user, rating=1).save()
             messages.success(request,_('Vote registered'))
+            cache_key = make_template_fragment_key('object_list')
+            cache.delete(cache_key)
         except IntegrityError as e:
             messages.warning(request, _('You already voted for this.'))
         except:
@@ -68,6 +73,8 @@ def rating_down(request, id=None, slug=None):
         try:
             Rating(post=post_obj, user=request.user, rating=-1).save()
             messages.success(request,_('Vote registered'))
+            cache_key = make_template_fragment_key('object_list')
+            cache.delete(cache_key)
         except IntegrityError as e:
             messages.warning(request, _('You already voted for this.'))
         except:
