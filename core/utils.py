@@ -7,6 +7,7 @@ import json
 import base64
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from django.core.exceptions import ValidationError
 
 def send_html_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None, connection=None):
     text_part = strip_tags(message)
@@ -34,9 +35,13 @@ def send_gearman_mail(subject, message, from_email, recipient_list, fail_silentl
     data['to_address'] = recipient_list
     data['from_address'] = from_email
 
-    client = gearman.Client()
-    client.add_servers('127.0.0.1:4730')
-    client.do('emailer', base64.b64encode(bytes(json.dumps(data), 'utf-8')), background=True)
+
+    try:
+        client = gearman.Client()
+        client.add_servers('127.0.0.1:4730')
+        client.do('emailer', base64.b64encode(bytes(json.dumps(data), 'utf-8')), background=True)
+    except:
+        raise ValidationError
 
 def normalize_query(query_string, findterms=re.compile(r'"([^"]+)"|(\S+)').findall, normspace=re.compile(r'\s{2,}').sub):
     ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
