@@ -8,6 +8,13 @@ import base64
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.core.exceptions import ValidationError
+import uuid
+import os
+
+def get_file_path(instance, filename):
+    extension = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), extension)
+    return os.path.join('avatars/', filename)
 
 def send_html_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None, connection=None):
     text_part = strip_tags(message)

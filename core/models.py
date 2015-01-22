@@ -9,12 +9,13 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from unidecode import unidecode
 from django.contrib.sitemaps import ping_google
-from core.utils import send_gearman_mail
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.conf import settings
 import hmac
 import hashlib
+
+from core.utils import send_gearman_mail, get_file_path
 
 class AuthorUserManager(BaseUserManager):
 
@@ -61,7 +62,7 @@ class Author(AbstractBaseUser, PermissionsMixin):
     receive_update = models.BooleanField(default=True)
     date_joined = models.DateTimeField(_('date joined'),default=timezone.now)
     registration_hash = models.CharField(max_length=64, blank=True)
-    avatar = models.ImageField(upload_to='avatars/', default='avatars/no-img.png', null=True, blank=True)
+    avatar = models.ImageField(upload_to=get_file_path, default='avatars/no-img.png', null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
