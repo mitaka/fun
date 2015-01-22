@@ -49,7 +49,7 @@ class AuthorDetailView(DetailView):
 
 class AuthorUpdateView(UpdateView):
     model = Author
-    fields = ['email', 'username', 'first_name', 'last_name', 'receive_update', 'avatar']
+    form_class = AuthorForm
 
 @login_required()
 def rating_up(request, id=None, slug=None):

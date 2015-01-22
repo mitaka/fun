@@ -5,11 +5,15 @@ from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from registration.forms import RegistrationForm
 from captcha.fields import CaptchaField
 from core.models import Author, Post
+from core.widgets import AdminImageWidget
 
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ['receive_update']
+        fields = ['email', 'username', 'first_name', 'last_name', 'receive_update', 'avatar']
+        widgets = {
+            'avatar': AdminImageWidget
+        }
 
 class PostForm(forms.ModelForm):
     content = forms.CharField(label=_('Content'), widget=SummernoteInplaceWidget())
