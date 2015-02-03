@@ -11,6 +11,9 @@ from django.core.exceptions import ValidationError
 import uuid
 import os
 
+#import logging
+#logger = logging.getLogger(__name__)
+
 def get_file_path(instance, filename):
     extension = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), extension)
@@ -21,6 +24,15 @@ def send_html_mail(subject, message, from_email, recipient_list, fail_silently=F
     msg = EmailMultiAlternatives(subject, text_part, from_email, recipient_list)
     msg.attach_alternative(message, "text/html")
     return msg.send()
+
+def send_gearman_jabber(message, recipient_list, auth_user=None, auth_password=None):
+    data = {"message": message, "recipients": recipient_list, "jabber_id": auth_user, "jabber_pass": auth_password}
+    try:
+        client = gearman.Client()
+        client.add_servers('127.0.0.1:4730')
+        client.do('jabber_worker', base64.b64encode(bytes(json.dumps(data), 'utf-8')), background=True)
+    except:
+        raise ValidationError
 
 def send_gearman_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None, host='127.0.0.1'):
     data = {}

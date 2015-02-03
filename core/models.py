@@ -114,12 +114,18 @@ class Author(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
+    def __unicode__(self):
+        return "%s %s" % (self.first_name, self.last_name)
+
 class Tag(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(_('name'), max_length=50, db_index=True)
 
     def __str__(self):
         return "%s" % self.name    
+
+    def __unicode__(self):
+        return "%s" % self.name
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
@@ -130,6 +136,9 @@ class Category(models.Model):
         verbose_name_plural = _('categories')
 
     def __str__(self):
+        return "%s" % self.name
+
+    def __unicode__(self):
         return "%s" % self.name
 
 class Post(models.Model):
@@ -181,6 +190,9 @@ class Post(models.Model):
     def __str__(self):
         return "%s" % self.title
 
+    def __unicode___(self):
+        return "%s" % self.title
+
     def get_absolute_url(self):
         return "/post/" + str(self.id) + "/" + self.slug + "/"
 
@@ -195,3 +207,21 @@ class Rating(models.Model):
 
     def get_rating(self, post):
         return Rating.objects.filter(post__pk=post).aggregate(Avg('rating'))
+
+class NewsLetter(models.Model):
+    id = models.AutoField(primary_key=True)
+    subject = models.CharField(max_length=150)
+    content = models.TextField()
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(default=timezone.now)
+    sent = models.BooleanField(default=False)
+    date_sent = models.DateTimeField(blank=True,null=True)
+
+    class Meta:
+        ordering = ['-date_created']
+
+    def __str__(self):
+        return "%s" % self.subject
+
+    def __unicode__(self):
+        return "%s" % self.subject
