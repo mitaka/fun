@@ -42,7 +42,6 @@ def send_gearman_mail(subject, message, from_email, recipient_list, fail_silentl
     data['to_address'] = recipient_list
     data['from_address'] = from_email
 
-
     try:
         client = gearman.Client()
         client.add_servers('127.0.0.1:4730')
