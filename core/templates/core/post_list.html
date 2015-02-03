@@ -14,7 +14,6 @@
 
 {% block content %}
 {% if object_list %}
-    {% cache 600 object_list %}
     {% for post in object_list %}
     <div itemprop="blogPost" itemscope itemtype="http://schema.org/Blog">
         <div class="col-md-offset-2">
@@ -23,7 +22,6 @@
         <br />
     </div>
     {% endfor %}
-    {% endcache %}
     {% if is_paginated %}
         <div class="col-md-offset-6">
             {% bootstrap_pagination page_obj %}
