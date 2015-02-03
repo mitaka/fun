@@ -10,7 +10,7 @@ from core.widgets import AdminImageWidget
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ['email', 'username', 'first_name', 'last_name', 'receive_update', 'avatar']
+        fields = ['email', 'username', 'first_name', 'last_name', 'receive_update', 'jabber_contact', 'avatar']
         widgets = {
             'avatar': AdminImageWidget
         }

@@ -17,6 +17,16 @@ import hashlib
 
 from core.utils import send_gearman_mail, get_file_path
 
+import logging
+logger = logging.getLogger(__name__)
+
+RECEIVE_TYPE = (
+    (0,_('No updates')),
+    (1,_('Mail per post')),
+    (2,_('Digest (not implemented)')),
+    (3,_('Jabber (not implemented)')),
+)
+
 class AuthorUserManager(BaseUserManager):
 
     def create_user(self, username, email, password, **extra_fields):
@@ -59,10 +69,11 @@ class Author(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_('Last Name'), max_length=150)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    receive_update = models.BooleanField(default=True)
+    receive_update = models.PositiveSmallIntegerField(default=1,choices=RECEIVE_TYPE)
     date_joined = models.DateTimeField(_('date joined'),default=timezone.now)
     registration_hash = models.CharField(max_length=64, blank=True)
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/no-img.png', null=True, blank=True)
+    jabber_contact = models.CharField(max_length=512, unique=True, null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -158,7 +169,7 @@ class Post(models.Model):
             with open ("/home/django/projects/fun/core/templates/core/post_email.txt", "r") as myfile:
                 t = myfile.read().replace('\n', '')
             template = Template(t)
-            for author in Author.objects.filter(receive_update=True):
+            for author in Author.objects.filter(receive_update=1):
                 if author.pk == self.author.pk:
                     continue
                 if author.is_active:
