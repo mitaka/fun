@@ -152,7 +152,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         created = False
-        if self.pk is not None:
+        if self.pk is None:
             created = True
 
         if self.slug == '':
