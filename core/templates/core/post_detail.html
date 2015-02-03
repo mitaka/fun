@@ -14,6 +14,15 @@
     {{ post.title }}
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    .avatar {
+        width:32px;
+        height:32px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
     <div itemprop="blogPost" itemscope itemtype="http://schema.org/Blog">
         <div class="col-md-12">
