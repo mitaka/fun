@@ -1,0 +1,18 @@
+<html>
+<head>
+</head>
+<body>
+
+<br />
+This is the daily digest of all posts during the day. To view any post please click on its link:
+
+{% for post in posts %}
+<br />
+<a href="{{ post.url }}?utm_source=mandrill&utm_medium=email&utm_campaign=track">{{ post.title }}</a>
+
+<br />
+{% endfor %}
+This is an automated message. To unsubscribe please edit your profile settings.
+
+</body>
+</html>
