@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 RECEIVE_TYPE = (
     (0,_('No updates')),
     (1,_('Mail per post')),
-    (2,_('Digest (not implemented)')),
+    (2,_('Digest')),
     (3,_('Jabber (not implemented)')),
 )
 
