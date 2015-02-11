@@ -15,7 +15,7 @@ class PostAdmin(SummernoteModelAdmin):
 admin.site.register(Post, PostAdmin)
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ['email', '__str__', 'username', 'is_active']
+    list_display = ['email', '__str__', 'username', 'is_active', 'receive_update']
     filter_display = ['is_active']
 admin.site.register(Author, AuthorAdmin)
 
