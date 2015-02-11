@@ -4,8 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from registration.forms import RegistrationForm
 from captcha.fields import CaptchaField
-from core.models import Author, Post
-from core.widgets import AdminImageWidget
+from core.models import Author, Post, NewsLetter
+from core.widgets import AdminImageWidget, SummernoteCustomWidget
 
 class AuthorForm(forms.ModelForm):
     class Meta:
@@ -21,6 +21,12 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'category', 'keywords', 'unsafe']
+
+class NewsLetterForm(forms.ModelForm):
+    content = forms.CharField(label=_('Content'), widget=SummernoteCustomWidget())
+
+    class Media:
+        model = NewsLetter
 
 class CaptchaRegistrationForm(RegistrationForm):
     captcha = CaptchaField()
