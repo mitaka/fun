@@ -1,18 +1,25 @@
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from django.db.models import Q
-import re
-import gearman
-import json
-import base64
+from django.template import Template, Context
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.core.exceptions import ValidationError
 import uuid
+import re
+import gearman
+import json
+import base64
 import os
 
 #import logging
 #logger = logging.getLogger(__name__)
+
+def read_template(template_name):
+    with open (template_name, "r") as template_file:
+        t = template_file.read().replace('\n', '')
+    template = Template(t)
+    return template
 
 def get_file_path(instance, filename):
     extension = filename.split('.')[-1]
