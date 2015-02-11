@@ -12,12 +12,16 @@ class Command(BaseCommand):
         days_diff = 1
         post_list = {}
         post_list['posts'] = list()
+
         for post in Post.objects.filter(date_created__gte=datetime.now()-timedelta(days=days_diff)):
             context = {}
             context['title'] = post.title
             context['url'] = "http://fun.mitaka-g.net/post/" + str(post.pk) + "/" + post.slug + "/"
             post_list['posts'].append(context)
-            
+
+        if post_list['posts'].len == 0:
+            return
+
         with open ("/home/django/projects/fun/core/templates/core/post_digest_email.txt", "r") as templatefile:
             t = templatefile.read().replace('\n', '')
         template = Template(t)
