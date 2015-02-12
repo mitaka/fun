@@ -1,9 +1,10 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.template import Template, Context
 from django.conf import settings
+from django.db.models import Q
 from datetime import datetime, timedelta
 from core.models import Author, Post
-from core.utils import send_gearman_mail
+from core.utils import send_gearman_mail, read_template
 
 class Command(BaseCommand):
     help = 'Sends daily digest mails to anyone subscribed'
@@ -22,11 +23,8 @@ class Command(BaseCommand):
         if post_list['posts'].len == 0:
             return
 
-        with open ("/home/django/projects/fun/core/templates/core/post_digest_email.txt", "r") as templatefile:
-            t = templatefile.read().replace('\n', '')
-        template = Template(t)
+        template = read_template('/home/django/projects/fun/core/templates/core/post_digest_email.txt')
 
-        for author in Author.objects.filter(receive_update=2):
-            if author.is_active:
-                send_gearman_mail('Daily digest for fun.mitaka-g.net', template.render(Context(post_list)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
+        for author in Author.objects.filter(Q(receive_update=2) & Q(is_active=True)):
+            send_gearman_mail('Daily digest for fun.mitaka-g.net', template.render(Context(post_list)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
             
