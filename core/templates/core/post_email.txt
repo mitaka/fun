@@ -7,7 +7,11 @@
 A new post has been added. Click the following link to view it:
 
 <br />
+{% autoescape off %}
 <a href="{{ url }}?utm_source=mandrill&utm_medium=email&utm_campaign=track">{{ title }}</a>
+
+{{ content }}
+{% endautoescape %}
 
 <br />
 This is an automated message. To unsubscribe please edit your profile settings.
