@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.template.defaultfilters import slugify
@@ -12,6 +13,7 @@ from django.contrib.sitemaps import ping_google
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.conf import settings
+from core.utils import read_template
 import hmac
 import hashlib
 
@@ -174,15 +176,10 @@ class Post(models.Model):
         except Exception():
             pass
         if created:
-            context = {"title": self.title, "url": "http://fun.mitaka-g.net/post/" + str(self.pk) + "/" + self.slug + "/"}
-            with open ("/home/django/projects/fun/core/templates/core/post_email.txt", "r") as myfile:
-                t = myfile.read().replace('\n', '')
-            template = Template(t)
-            for author in Author.objects.filter(receive_update=1):
-                if author.pk == self.author.pk:
-                    continue
-                if author.is_active:
-                    send_gearman_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
+            context = {"title": self.title, "url": "http://fun.mitaka-g.net/post/" + str(self.pk) + "/" + self.slug + "/","content": self.content}
+            template = read_template('/home/django/projects/fun/core/templates/core/post_email.txt')
+            for author in Author.objects.filter(Q(receive_update=1) & ~Q(pk = self.author.pk) & Q(is_active=True)):
+                send_gearman_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
 
         cache_key = make_template_fragment_key('object_list')
         cache.delete(cache_key)
