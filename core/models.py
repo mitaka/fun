@@ -17,7 +17,7 @@ from core.utils import read_template
 import hmac
 import hashlib
 
-from core.utils import send_gearman_mail, get_file_path
+from core.utils import send_gearman_mail, get_file_path, send_gearman_jabber
 
 import logging
 logger = logging.getLogger(__name__)
@@ -176,13 +176,23 @@ class Post(models.Model):
         except Exception():
             pass
         if created:
-            context = {"title": self.title, "url": "http://fun.mitaka-g.net/post/" + str(self.pk) + "/" + self.slug + "/","content": self.content}
-            template = read_template('/home/django/projects/fun/core/templates/core/post_email.txt')
-            for author in Author.objects.filter(Q(receive_update=1) & ~Q(pk = self.author.pk) & Q(is_active=True)):
-                send_gearman_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
+            context = {
+                "title": self.title,
+                "url": "http://fun.mitaka-g.net/post/" + str(self.pk) + "/" + self.slug + "/",
+                "content": self.content,
+                "author": self.author
+            }
 
-        cache_key = make_template_fragment_key('object_list')
-        cache.delete(cache_key)
+            for author in Author.objects.filter(~Q(pk = self.author.pk) & Q(is_active=True)):
+                if author.receive_update == 1:
+                    template = read_template('/home/django/projects/fun/core/templates/core/post_email.txt')
+                    send_gearman_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
+                elif author.receive_update == 3:
+                    template = read_template('/home/django/projects/fun/core/templates/core/post_jabber.txt', replace_newlines = False)
+                    send_gearman_jabber(template.render(Context(context)), author.jabber_contact)
+
+    cache_key = make_template_fragment_key('object_list')
+    cache.delete(cache_key)
 
     def __str__(self):
         return "%s" % self.title

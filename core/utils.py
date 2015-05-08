@@ -15,9 +15,13 @@ import os
 #import logging
 #logger = logging.getLogger(__name__)
 
-def read_template(template_name):
+def read_template(template_name, replace_newlines = True):
     with open (template_name, "r") as template_file:
-        t = template_file.read().replace('\n', '')
+        t = template_file.read()
+
+    if replace_newlines:
+        t.replace('\n', '')
+
     template = Template(t)
     return template
 
@@ -33,11 +37,11 @@ def send_html_mail(subject, message, from_email, recipient_list, fail_silently=F
     return msg.send()
 
 def send_gearman_jabber(message, recipient_list, auth_user=None, auth_password=None):
-    data = {"message": message, "recipients": recipient_list, "jabber_id": auth_user, "jabber_pass": auth_password}
+    data = {"message": strip_tags(message), "recipient": recipient_list, "jabber_id": auth_user, "jabber_pass": auth_password}
     try:
         client = gearman.Client()
         client.add_servers('127.0.0.1:4730')
-        client.do('jabber_worker', base64.b64encode(bytes(json.dumps(data), 'utf-8')), background=True)
+        client.do('jabber', base64.b64encode(bytes(json.dumps(data), 'utf-8')), background=True)
     except:
         raise ValidationError
 
