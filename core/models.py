@@ -26,7 +26,7 @@ RECEIVE_TYPE = (
     (0,_('No updates')),
     (1,_('Mail per post')),
     (2,_('Digest')),
-    (3,_('Jabber (not implemented)')),
+    (3,_('Jabber')),
 )
 
 class AuthorUserManager(BaseUserManager):
