@@ -10,6 +10,7 @@ A new post has been added. Click the following link to view it:
 {% autoescape off %}
 <a href="{{ url }}?utm_source=mandrill&utm_medium=email&utm_campaign=track">{{ title }}</a>
 
+<br />
 {{ content }}
 {% endautoescape %}
 
