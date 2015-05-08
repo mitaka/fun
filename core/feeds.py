@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from core.models import Post
 
 class LastPostsFeed(Feed):
-    title = _('Latest posts')
+    title = _('Fun latest posts')
     link = '/feed/'
     description = _('Latest posts')
 
