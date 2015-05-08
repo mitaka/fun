@@ -23,7 +23,7 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'content', 'category', 'keywords', 'unsafe']
 
 class NewsLetterForm(forms.ModelForm):
-    content = forms.CharField(label=_('Content'), widget=SummernoteCustomWidget())
+    content = forms.CharField(label=_('Content'), widget=SummernoteInplaceWidget())
 
     class Media:
         model = NewsLetter
