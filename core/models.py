@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import post_save
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.template.defaultfilters import slugify
@@ -14,6 +15,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.conf import settings
 from core.utils import read_template
+from core.signals import post_save_user
 import hmac
 import hashlib
 
@@ -54,6 +56,7 @@ class AuthorUserManager(BaseUserManager):
         digest = hmac.new(secret, data, digestmod=hashlib.sha256)
         user.registration_hash = digest.hexdigest()
         user.save(using=self._db)
+
         return user
 
     def create_superuser(self, username, email, password):
@@ -234,3 +237,5 @@ class NewsLetter(models.Model):
 
     def __unicode__(self):
         return "%s" % self.subject
+
+post_save.connect(post_save_user, sender=Author)
