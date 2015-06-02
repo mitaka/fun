@@ -171,10 +171,12 @@ class Post(models.Model):
 
         super(Post, self).save(*args,**kwargs)
 
-        try:
-            ping_google(sitemap_url='/sitemap.xml')
-        except Exception():
-            pass
+        if not settings.DEBUG:
+            try:
+                ping_google(sitemap_url='/sitemap.xml')
+            except Exception():
+                pass
+
         if created:
             context = {
                 "title": self.title,
