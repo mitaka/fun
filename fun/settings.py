@@ -82,22 +82,20 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-#STATIC_URL = '/static/'
-STATIC_URL = 'http://static.mitaka-g.net/admin/'
-STATIC_ROOT = '/home/static/public_html/admin/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 ACCOUNT_ACTIVATION_DAYS = 5
 REGISTRATION_OPEN = True
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/profile/login/'
 
-DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 AUTH_USER_MODEL = 'core.Author'
 
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
 SUMMERNOTE_CONFIG = {
     'iframe': False,
@@ -141,6 +139,8 @@ EMAIL_HOST_USER = MANDRILL_USER
 EMAIL_HOST_PASSWORD = MANDRILL_API_KEY
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 LOGGING = {
     'version': 1,
