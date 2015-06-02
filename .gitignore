@@ -56,3 +56,4 @@ docs/_build/
 # django stuff and custom scripts
 django-summernote
 manage.py
+static/
