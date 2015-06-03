@@ -30,7 +30,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'south',
     'bootstrap3',
     'registration',
     'django_summernote',
@@ -108,8 +107,9 @@ INTERNAL_IPS = ('127.0.0.1')
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": "127.0.0.1:6379:1",
+        "LOCATION": "127.0.0.1:6379",
         "OPTIONS": {
+            "DB": 1,
             "CLIENT_CLASS": "redis_cache.client.DefaultClient",
             "PARSER_CLASS": "redis.connection.HiredisParser",
         }
