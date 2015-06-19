@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from core.feeds import LastPostsFeed
-from core.views import PostListView, PostDetailView, PostEditView, PostCreateView, CategoryCreateView,AuthorDetailView, AuthorUpdateView
+from core.views import PostListView, PostDetailView, PostEditView, PostCreateView, CategoryCreateView,AuthorDetailView, AuthorUpdateView, CategoryListPostsView
 from core.forms import CaptchaRegistrationForm
 from core.sitemap import PostSitemap
 from django.views.generic.base import TemplateView
@@ -20,6 +20,7 @@ urlpatterns = patterns('core.views',
     url(r'^$', PostListView.as_view(), name='index'),
     url(r'^post/add/$', login_required(PostCreateView.as_view()), name='add_post'),
     url(r'^category/add/$', login_required(CategoryCreateView.as_view()), name='add_category'),
+    url(r'^category/(?P<name>[-_\w]+)/$', login_required(CategoryListPostsView.as_view()), name='list_category_posts'),
     #url(r'^post/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', cache_page(60 * 15)(PostDetailView.as_view()), name='post'),
     url(r'^post/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', PostDetailView.as_view(), name='post'),
     url(r'^post/edit/(?P<pk>\d+)/$', login_required(PostEditView.as_view()), name='edit_post'),

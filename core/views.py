@@ -44,6 +44,11 @@ class CategoryCreateView(CreateView):
     model = Category
     success_url = '/'
 
+class CategoryListPostsView(ListView):
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, name = self.kwargs['name'])
+        return Post.objects.filter(category = self.category)
+
 class AuthorDetailView(DetailView):
     model = Author
 
