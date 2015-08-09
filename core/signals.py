@@ -12,5 +12,6 @@ def post_save_user(sender, instance, created, **kwargs):
             "email": instance.email
     }
 
-    template = read_template('core/templates/registration/registration_email.txt')
-    send_gearman_mail('User registration', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [settings.ADMIN_EMAIL], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
+    if created:
+        template = read_template('core/templates/registration/registration_email.txt')
+        send_gearman_mail('User registration', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [settings.ADMIN_EMAIL], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
