@@ -1,0 +1,4 @@
+[Global]
+jabber_user =
+jabber_pass =
+log_file = /var/log/workers/jabber.log
