@@ -3,6 +3,7 @@ A new post has been added.
 Title: {{ title }}
 Author: {{ author }}
 Content: {{ content }}
+Url: {{ url }}
 {% endautoescape %}
 
 This is an automated message. To unsubscribe please edit your profile settings.
