@@ -20,9 +20,6 @@
                 <a href="{% url 'rating_up' id=post.pk slug=post.slug %}">+</a>
                 <a href="{% url 'rating_down' id=post.pk slug=post.slug %}">-</a>
             </div>
-            <div class="post-content">
-                Категория: <a href="{% url 'list_category_posts' name=post.category.name %}">{{ post.category.name }}</a>
-            </div>
             {% if post.author = user %}
             <div class="post-content">
                 <a href="{% url 'edit_post' pk=post.pk %}">Редактирай</a>
