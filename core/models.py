@@ -12,7 +12,6 @@ from django.core.mail import send_mail
 from unidecode import unidecode
 from django.contrib.sitemaps import ping_google
 from django.core.cache import cache
-from django.core.cache.utils import make_template_fragment_key
 from django.conf import settings
 from core.utils import read_template
 from core.signals import post_save_user
@@ -196,8 +195,7 @@ class Post(models.Model):
                     template = read_template('/home/django/projects/fun/core/templates/core/post_jabber.txt', replace_newlines = False)
                     send_gearman_jabber(template.render(Context(context)), author.jabber_contact)
 
-    cache_key = make_template_fragment_key('object_list')
-    cache.delete(cache_key)
+    cache.delete_pattern('template.cache.post.content*')
 
     def __str__(self):
         return "%s" % self.title
