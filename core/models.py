@@ -4,11 +4,10 @@ from django.db.models.signals import post_save
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.template.defaultfilters import slugify
-from django.template import Template, Context
+from django.template import Context
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote
 from django.utils import timezone
-from django.core.mail import send_mail
 from unidecode import unidecode
 from django.contrib.sitemaps import ping_google
 from django.core.cache import cache
@@ -24,11 +23,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 RECEIVE_TYPE = (
-    (0,_('No updates')),
-    (1,_('Mail per post')),
-    (2,_('Digest')),
-    (3,_('Jabber')),
+    (0, _('No updates')),
+    (1, _('Mail per post')),
+    (2, _('Digest')),
+    (3, _('Jabber')),
 )
+
 
 class AuthorUserManager(BaseUserManager):
 
@@ -46,9 +46,9 @@ class AuthorUserManager(BaseUserManager):
 
         now = timezone.now()
         user = self.model(email=AuthorUserManager.normalize_email(email),
-                        username=username,
-                        is_staff=False, is_active=False, is_superuser=False,
-                        last_login=now, date_joined=now, **extra_fields)
+                          username=username,
+                          is_staff=False, is_active=False, is_superuser=False,
+                          last_login=now, date_joined=now, **extra_fields)
         user.set_password(password)
         secret = bytes(user.email, 'utf-8')
         data = bytes(user.username, 'utf-8')
@@ -66,15 +66,16 @@ class AuthorUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class Author(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'),unique=True)
+    email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(_('Username'), max_length=50, unique=True)
     first_name = models.CharField(_('First Name'), max_length=150)
     last_name = models.CharField(_('Last Name'), max_length=150)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    receive_update = models.PositiveSmallIntegerField(default=1,choices=RECEIVE_TYPE)
-    date_joined = models.DateTimeField(_('date joined'),default=timezone.now)
+    receive_update = models.PositiveSmallIntegerField(default=1, choices=RECEIVE_TYPE)
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     registration_hash = models.CharField(max_length=64, blank=True)
     avatar = models.ImageField(upload_to=get_file_path, default='avatars/no-img.png', null=True, blank=True)
     jabber_contact = models.CharField(max_length=512, unique=True, null=True, blank=True)
@@ -100,7 +101,6 @@ class Author(AbstractBaseUser, PermissionsMixin):
         return "/profile/%s/" % urlquote(self.pk)
 
     def email_user(self, subject, message, from_email=None):
-        a = self.username
         send_mail(subject, message, from_email, [self.email])
 
     def activate_user(self, user, hash):
@@ -121,15 +121,17 @@ class Author(AbstractBaseUser, PermissionsMixin):
     def __unicode__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
+
 class Tag(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(_('name'), max_length=50, db_index=True)
 
     def __str__(self):
-        return "%s" % self.name    
+        return "%s" % self.name
 
     def __unicode__(self):
         return "%s" % self.name
+
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
@@ -145,6 +147,7 @@ class Category(models.Model):
     def __unicode__(self):
         return "%s" % self.name
 
+
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=150)
@@ -155,7 +158,7 @@ class Post(models.Model):
     last_update = models.DateTimeField(default=timezone.now)
     tag = models.ManyToManyField(Tag, related_name="tag_name")
     keywords = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=255,blank=True)
+    slug = models.SlugField(max_length=255, blank=True)
     unsafe = models.BooleanField(default=False)
 
     class Meta:
@@ -171,7 +174,7 @@ class Post(models.Model):
         if self.slug == '':
             self.slug = slugify(unidecode(self.title[:255]))
 
-        super(Post, self).save(*args,**kwargs)
+        super(Post, self).save(*args, **kwargs)
 
         if not settings.DEBUG:
             try:
@@ -187,12 +190,12 @@ class Post(models.Model):
                 "author": self.author
             }
 
-            for author in Author.objects.filter(~Q(pk = self.author.pk) & Q(is_active=True)):
+            for author in Author.objects.filter(~Q(pk=self.author.pk) & Q(is_active=True)):
                 if author.receive_update == 1:
                     template = read_template('/home/django/projects/fun/core/templates/core/post_email.txt')
                     send_gearman_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
                 elif author.receive_update == 3:
-                    template = read_template('/home/django/projects/fun/core/templates/core/post_jabber.txt', replace_newlines = False)
+                    template = read_template('/home/django/projects/fun/core/templates/core/post_jabber.txt', replace_newlines=False)
                     send_gearman_jabber(template.render(Context(context)), author.jabber_contact)
 
     cache.delete_pattern('template.cache.post.content*')
@@ -206,6 +209,7 @@ class Post(models.Model):
     def get_absolute_url(self):
         return "/post/" + str(self.id) + "/" + self.slug + "/"
 
+
 class Rating(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Author)
@@ -213,10 +217,11 @@ class Rating(models.Model):
     rating = models.IntegerField()
 
     class Meta:
-        unique_together = (('user','post'))
+        unique_together = (('user', 'post'))
 
     def get_rating(self, post):
         return Rating.objects.filter(post__pk=post).aggregate(Avg('rating'))
+
 
 class NewsLetter(models.Model):
     id = models.AutoField(primary_key=True)
@@ -225,7 +230,7 @@ class NewsLetter(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(default=timezone.now)
     sent = models.BooleanField(default=False)
-    date_sent = models.DateTimeField(blank=True,null=True)
+    date_sent = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         ordering = ['-date_created']

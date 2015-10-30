@@ -1,7 +1,7 @@
 from django.contrib.syndication.views import Feed
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from core.models import Post
+
 
 class LastPostsFeed(Feed):
     title = _('Fun latest posts')

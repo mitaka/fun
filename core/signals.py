@@ -1,16 +1,13 @@
-from django.dispatch import receiver, Signal
 from django.conf import settings
 from django.template import Context
-from core.utils import send_html_mail, read_template, send_gearman_mail
+from core.utils import read_template, send_gearman_mail
 
 import logging
 logger = logging.getLogger(__name__)
 
+
 def post_save_user(sender, instance, created, **kwargs):
-    context = {
-            "user": instance.username,
-            "email": instance.email
-    }
+    context = {"user": instance.username, "email": instance.email}
 
     if created:
         template = read_template('core/templates/registration/registration_email.txt')
