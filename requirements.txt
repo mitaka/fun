@@ -1,11 +1,11 @@
 Cython==0.22
-Django==1.8.2
-django-bootstrap3==5.4.0
+Django==1.8.5
+django-bootstrap3==4.8.2
 django-debug-toolbar==1.3.0
 django-redis-cache==1.6.3
 django-registration-redux==1.2
 django-simple-captcha==0.4.5
-django-summernote==0.6.8
+django-summernote==0.6.3
 git+https://github.com/Lupino/py3k-gearman
 hiredis==0.2.0
 Pillow==2.8.1
