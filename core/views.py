@@ -29,7 +29,6 @@ class PostDetailView(DetailView):
 class PostCreateView(CreateView):
     model = Post
     form_class = PostForm
-    fields = ['title', 'content', 'category', 'keywords']
 
     def form_valid(self, form):
         form.instance.author = get_object_or_404(Author, username=self.request.user.username)
