@@ -45,8 +45,9 @@ def task_jabber(gearman_worker, job):
     xmpp = SendMsgBot(username, password, data['recipient'], data['message'])
 
     xmpp.register_plugin('xep_0030')  # Service Discovery
-    xmpp.register_plugin('xep_0199')  # XMPP Ping
+    xmpp.register_plugin('xep_0045')  # Multi-User Chat
     xmpp.register_plugin('xep_0071')  # HTML-IM
+    xmpp.register_plugin('xep_0199')  # XMPP Ping
 
     if xmpp.connect():
         xmpp.process(block=True)
