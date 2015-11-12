@@ -41,7 +41,6 @@ class PostCreateView(CreateView):
 class PostEditView(UpdateView):
     model = Post
     form_class = PostForm
-    fields = ['title', 'content', 'category', 'keywords']
 
 
 class CategoryCreateView(CreateView):
