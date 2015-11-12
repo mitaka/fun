@@ -115,6 +115,11 @@ class Author(AbstractBaseUser, PermissionsMixin):
             else:
                 return False
 
+    def save(self, *args, **kwargs):
+        if self.last_login is None:
+            self.last_login = timezone.now()
+        super(Author, self).save(*args, **kwargs)
+
     def __str__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
