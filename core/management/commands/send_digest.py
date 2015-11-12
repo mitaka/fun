@@ -20,11 +20,10 @@ class Command(BaseCommand):
             context['url'] = "http://fun.mitaka-g.net/post/" + str(post.pk) + "/" + post.slug + "/"
             post_list['posts'].append(context)
 
-        if post_list['posts'].len == 0:
+        if len(post_list['posts']) == 0:
             return
 
         template = read_template('/home/django/projects/fun/core/templates/core/post_digest_email.txt')
 
         for author in Author.objects.filter(Q(receive_update=2) & Q(is_active=True)):
             send_gearman_mail('Daily digest for fun.mitaka-g.net', template.render(Context(post_list)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
-            
