@@ -18,6 +18,7 @@ from django.core.cache.utils import make_template_fragment_key
 from core.models import Post, Author, Category, Rating
 from core.forms import AuthorForm, PostForm
 from core.utils import get_query
+from core.mixins import PostOwnerMixin
 
 
 class PostListView(ListView):
@@ -38,7 +39,7 @@ class PostCreateView(CreateView):
         return super(PostCreateView, self).form_valid(form)
 
 
-class PostEditView(UpdateView):
+class PostEditView(PostOwnerMixin, UpdateView):
     model = Post
     form_class = PostForm
 
@@ -57,10 +58,16 @@ class CategoryListPostsView(ListView):
 class AuthorDetailView(DetailView):
     model = Author
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
 
 class AuthorUpdateView(UpdateView):
     model = Author
     form_class = AuthorForm
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 @login_required()
