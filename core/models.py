@@ -37,6 +37,10 @@ class AuthorUserManager(BaseUserManager):
             msg = _('Users must have valid email address')
             raise ValueError(msg)
 
+        if not self.check_blacklisted_domain(email):
+            msg = _('Registration with this email is not allowed')
+            raise ValueError(msg)
+
         if password is None:
             msg = _('Please supply password')
             raise ValueError(msg)
@@ -57,6 +61,24 @@ class AuthorUserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
+
+    def check_blacklisted_domain(self, email):
+        domain = email.split("@")[1]
+        logger.debug(domain)
+        blacklisted_domains = cache.get('blacklisted_domains')
+        logger.debug(blacklisted_domains)
+
+        if blacklisted_domains is None and settings.BL_DOMAINS:
+            with open(settings.BL_DOMAINS) as f:
+                blacklisted_domains = f.read().splitlines()
+            cache.set('blacklisted_domains', blacklisted_domains)
+            logger.debug(blacklisted_domains)
+
+        if domain in blacklisted_domains:
+            logger.info("Registration with blacklisted domain detected")
+            return False
+
+        return True
 
     def create_superuser(self, username, email, password):
         user = self.create_user(username, email, password)

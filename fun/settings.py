@@ -173,5 +173,7 @@ LOGGING = {
     }
 }
 
+BL_DOMAINS = os.path.join(BASE_DIR, 'blacklisted_domains.txt')
+
 VERSION = os.environ['VERSION']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
