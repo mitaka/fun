@@ -5,6 +5,8 @@ from django.template import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.core.exceptions import ValidationError
+import string
+import random
 import uuid
 import re
 import gearman
@@ -30,6 +32,10 @@ def get_file_path(instance, filename):
     extension = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), extension)
     return os.path.join('avatars/', filename)
+
+
+def get_random_string(length, stringset=string.ascii_letters):
+    return ''.join(random.choice(stringset) for _ in range(length))
 
 
 def send_html_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None, connection=None):

@@ -12,7 +12,7 @@ from unidecode import unidecode
 from django.contrib.sitemaps import ping_google
 from django.core.cache import cache
 from django.conf import settings
-from core.utils import read_template
+from core.utils import read_template, get_random_string
 from core.signals import post_save_user
 import hmac
 import hashlib
@@ -118,6 +118,8 @@ class Author(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if self.last_login is None:
             self.last_login = timezone.now()
+        if self.username is None or self.username == '':
+            self.username = get_random_string(16)
         super(Author, self).save(*args, **kwargs)
 
     def __str__(self):
