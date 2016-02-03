@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sleekxmpp
+import sys
 import gearman
 import base64
 import json
@@ -13,6 +14,12 @@ config = ConfigParser.ConfigParser()
 config.read(CONFIG_FILE)
 
 logging.basicConfig(format='%(asctime)s %(message)s', filename=config.get('Global', 'log_file'), level=logging.DEBUG)
+
+if sys.version_info < (3, 0):
+    from sleekxmpp.util.misc_ops import setdefaultencoding
+    setdefaultencoding('utf8')
+else:
+    raw_input = input
 
 
 class SendMsgBot(sleekxmpp.ClientXMPP):
