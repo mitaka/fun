@@ -8,7 +8,7 @@ This is the daily digest of all posts during the day. To view any post please cl
 
 {% for post in posts %}
 <br />
-<a href="{{ post.url }}?utm_source=mandrill&utm_medium=email&utm_campaign=track">{{ post.title }}</a>
+<a href="{{ post.url }}?utm_source=mailgun&utm_medium=email&utm_campaign=track">{{ post.title }}</a>
 
 <br />
 {% endfor %}

@@ -8,7 +8,7 @@ A new post has been added. Click the following link to view it:
 
 <br />
 {% autoescape off %}
-<a href="{{ url }}?utm_source=mandrill&utm_medium=email&utm_campaign=track">{{ title }}</a>
+<a href="{{ url }}?utm_source=mailgun&utm_medium=email&utm_campaign=track">{{ title }}</a>
 
 <br />
 {{ content }}
