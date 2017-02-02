@@ -1,0 +1,2 @@
+[Global]
+log_file = /var/log/workers/emailer.log
