@@ -6,12 +6,15 @@ import gearman
 import base64
 import json
 import logging
-import ConfigParser
+import configparser
 
 CONFIG_FILE = '/home/django/projects/fun/fun/jabber.conf'
 
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(CONFIG_FILE)
+
+worker = gearman.Worker()
+worker.add_servers('127.0.0.1:4730')
 
 logging.basicConfig(format='%(asctime)s %(message)s', filename=config.get('Global', 'log_file'), level=logging.DEBUG)
 
@@ -37,10 +40,6 @@ class SendMsgBot(sleekxmpp.ClientXMPP):
         self.disconnect(wait=True)
 
 
-class JabberWorker(gearman.GearmanWorker):
-    pass
-
-
 def task_jabber(gearman_worker, job):
     data = json.loads(base64.b64decode(job.data).decode('utf-8'))
     logging.info("Data: " + base64.b64decode(job.data).decode('utf-8'))
@@ -49,7 +48,7 @@ def task_jabber(gearman_worker, job):
 
     logging.info("Received message for " + data['recipient'])
 
-    xmpp = SendMsgBot(username, password, data['recipient'], data['message'])
+    xmpp = SendMsgBot(username, password, data['recipient'].strip(), data['message'])
 
     xmpp.register_plugin('xep_0030')  # Service Discovery
     xmpp.register_plugin('xep_0045')  # Multi-User Chat
@@ -66,7 +65,6 @@ def task_jabber(gearman_worker, job):
 
     return base64.b64encode(bytes(json.dumps(message), 'utf-8'))
 
-worker = JabberWorker(['localhost:4730'])
-worker.set_client_id('jabber')
-worker.register_task('jabber', task_jabber)
-worker.work()
+worker.add_func('jabber', task_jabber)
+while True:
+        worker.work()

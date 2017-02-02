@@ -5,13 +5,20 @@ import base64
 import json
 import smtplib
 import logging
+import configparser
+
+CONFIG_FILE = '/home/django/projects/fun/fun/jabber.conf'
+
+config = configparser.ConfigParser()
+config.read(CONFIG_FILE)
 
 worker = gearman.Worker()
 worker.add_servers('127.0.0.1:4730')
-logging.basicConfig(format='%(asctime)s %(message)s', filename='/home/django/projects/fun/logs/emailer_worker.log', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s %(message)s', filename=config.get('Global', 'log_file'), level=logging.DEBUG)
 
 
 def task_emailer(job):
+    logging.debug("TEST: %s" % base64.b64decode(job.workload).decode('utf-8'))
     data = json.loads(base64.b64decode(job.workload).decode('utf-8'))
     recipient_string = ",".join(data['to_address'])
 
