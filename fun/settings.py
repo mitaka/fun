@@ -12,8 +12,6 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG', False))
 
-TEMPLATE_DEBUG = bool(os.environ.get('TEMPLATE_DEBUG', False))
-
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 
 SITE_ID = 1
@@ -92,9 +90,6 @@ AUTH_USER_MODEL = 'core.Author'
 
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
 
-#SESSION_COOKIE_SECURE = True
-#CSRF_COOKIE_SECURE = True
-
 SUMMERNOTE_CONFIG = {
     'iframe': False,
     'airMode': False,
@@ -115,12 +110,22 @@ CACHES = {
     }
 }
 
-TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': bool(os.environ.get('TEMPLATE_DEBUG', False)),
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
