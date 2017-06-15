@@ -20,7 +20,7 @@
                 <a href="{% url 'rating_up' id=post.pk slug=post.slug %}">+</a>
                 <a href="{% url 'rating_down' id=post.pk slug=post.slug %}">-</a>
             </div>
-            {% if post.author = user %}
+            {% if post.author == user %}
             <div class="post-content">
                 <a href="{% url 'edit_post' pk=post.pk %}">Редактирай</a>
             </div>
