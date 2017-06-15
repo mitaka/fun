@@ -2,15 +2,13 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
@@ -109,4 +107,4 @@ def search(request):
         query_string = request.GET['q']
         entry_query = get_query(query_string, ['title', 'content', ])
         found_entries = Post.objects.filter(entry_query).order_by('-last_update')
-    return render_to_response('core/search_results.html', {'query_string': query_string, 'found_entries': found_entries}, context_instance=RequestContext(request))
+    return render(request, 'core/search_results.html', {'query_string': query_string, 'found_entries': found_entries})
