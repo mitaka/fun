@@ -1,6 +1,6 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from core.feeds import LastPostsFeed
-from core.views import PostListView, PostDetailView, PostEditView, PostCreateView, CategoryCreateView, AuthorDetailView, AuthorUpdateView, CategoryListPostsView
+from core.views import PostListView, PostDetailView, PostEditView, PostCreateView, CategoryCreateView, AuthorDetailView, AuthorUpdateView, CategoryListPostsView, rating_up, rating_down, search
 from core.forms import CaptchaRegistrationForm
 from core.sitemap import PostSitemap
 from django.views.generic.base import TemplateView
@@ -13,7 +13,7 @@ sitemaps = {
     'fun': PostSitemap,
 }
 
-urlpatterns = patterns('core.views',
+urlpatterns = [
                        # url(r'^$', cache_page(60 * 15)(PostListView.as_view()), name='index'),
                        url(r'^$', PostListView.as_view(), name='index'),
                        url(r'^post/add/$', login_required(PostCreateView.as_view()), name='add_post'),
@@ -29,7 +29,8 @@ urlpatterns = patterns('core.views',
                        url(r'^activate/(?P<activation_key>\w+)/$', ActivationView.as_view(), name='registration_activate'),
                        url(r'^register/$', RegistrationView.as_view(form_class=CaptchaRegistrationForm), name='registration_register'),
                        url(r'^register/complete/$', TemplateView.as_view(template_name='registration/registration_complete.html'), name='registration_complete'),
-                       url(r'^rating/(?P<id>\d+)/(?P<slug>[-_\w]+)/up/$', 'rating_up', name='rating_up'),
-                       url(r'^rating/(?P<id>\d+)/(?P<slug>[-_\w]+)/down/$', 'rating_down', name='rating_down'),
-                       url(r'^search_results/', 'search', name='search'),
-                       url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),)
+                       url(r'^rating/(?P<id>\d+)/(?P<slug>[-_\w]+)/up/$', rating_up, name='rating_up'),
+                       url(r'^rating/(?P<id>\d+)/(?P<slug>[-_\w]+)/down/$', rating_down, name='rating_down'),
+                       url(r'^search_results/', search, name='search'),
+                       url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
+]
