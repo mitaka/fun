@@ -16,7 +16,7 @@ TEMPLATE_DEBUG = bool(os.environ.get('TEMPLATE_DEBUG', False))
 
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 
-SITE_ID=1
+SITE_ID = 1
 
 # Application definition
 
@@ -81,7 +81,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 ACCOUNT_ACTIVATION_DAYS = 5
 REGISTRATION_OPEN = True
@@ -126,12 +126,12 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 SESSION_COOKIE_AGE = 86400
 
-#These are used to send via gearman worker
+# These are used to send via gearman worker
 MANDRILL_USER = os.environ['MANDRILL_USER']
 MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
 MANDRILL_HOST = os.environ['MANDRILL_HOST']
 
-#These are for the default django email factory
+# These are for the default django email factory
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = MANDRILL_HOST
 EMAIL_HOST_USER = MANDRILL_USER
@@ -146,7 +146,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
-            'format' : '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -156,7 +156,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR,'logs/fun.log'),
+            'filename': os.path.join(BASE_DIR, 'logs/fun.log'),
             'formatter': 'verbose'
         },
     },
@@ -164,7 +164,7 @@ LOGGING = {
         'django': {
             'handlers': ['file'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
         'core': {
             'handlers': ['file'],
