@@ -13,10 +13,7 @@ CONFIG_FILE = '/home/django/projects/fun/fun/jabber.conf'
 config = configparser.ConfigParser()
 config.read(CONFIG_FILE)
 
-worker = gearman.Worker()
-worker.add_servers('127.0.0.1:4730')
-
-logging.basicConfig(format='%(asctime)s %(message)s', filename=config.get('Global', 'log_file'), level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s [JABBER] %(message)s', filename=config.get('Global', 'log_file'), level=logging.DEBUG)
 
 if sys.version_info < (3, 0):
     from sleekxmpp.util.misc_ops import setdefaultencoding
@@ -40,9 +37,9 @@ class SendMsgBot(sleekxmpp.ClientXMPP):
         self.disconnect(wait=True)
 
 
-def task_jabber(gearman_worker, job):
-    data = json.loads(base64.b64decode(job.data).decode('utf-8'))
-    logging.info("Data: " + base64.b64decode(job.data).decode('utf-8'))
+def task_jabber(job):
+    logging.debug("TEST: %s" % base64.b64decode(job.workload).decode('utf-8'))
+    data = json.loads(base64.b64decode(job.workload).decode('utf-8'))
     username = config.get('Global', 'jabber_user')
     password = config.get('Global', 'jabber_pass')
 
@@ -65,6 +62,11 @@ def task_jabber(gearman_worker, job):
 
     return base64.b64encode(bytes(json.dumps(message), 'utf-8'))
 
+worker = gearman.Worker()
+worker.add_servers('127.0.0.1:4730')
 worker.add_func('jabber', task_jabber)
+
+logging.info("Starting jabber worker...")
+
 while True:
         worker.work()
