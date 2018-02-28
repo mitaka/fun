@@ -7,7 +7,7 @@ import smtplib
 import logging
 import configparser
 
-CONFIG_FILE = '/home/django/projects/fun/fun/jabber.conf'
+CONFIG_FILE = '/home/django/projects/fun/fun/emailer.conf'
 
 config = configparser.ConfigParser()
 config.read(CONFIG_FILE)
