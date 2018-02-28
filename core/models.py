@@ -221,9 +221,11 @@ class Post(models.Model):
 
             for author in Author.objects.filter(~Q(pk=self.author.pk) & Q(is_active=True)):
                 if author.receive_update == 1:
+                    logger.info("Sending notification via email to %s", author.email)
                     template = read_template('/home/django/projects/fun/core/templates/core/post_email.txt')
                     send_gearman_mail('New post on fun.mitaka-g.net', template.render(Context(context)), 'webmaster@fun.mitaka-g.net', [author.email], fail_silently=False, auth_user=settings.MANDRILL_USER, auth_password=settings.MANDRILL_API_KEY, host=settings.MANDRILL_HOST)
                 elif author.receive_update == 3:
+                    logger.info("Sending notification via jabber to %s", author.jabber_contact)
                     template = read_template('/home/django/projects/fun/core/templates/core/post_jabber.txt', replace_newlines=False)
                     send_gearman_jabber(template.render(Context(context)), author.jabber_contact)
 
