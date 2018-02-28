@@ -47,11 +47,14 @@ def send_html_mail(subject, message, from_email, recipient_list, fail_silently=F
 
 def send_gearman_jabber(message, recipient_list, auth_user=None, auth_password=None):
     data = {"message": strip_tags(message), "recipient": recipient_list, "jabber_id": auth_user, "jabber_pass": auth_password}
+    logger.info("Sending jabber gearman job for %s", recipient_list)
     try:
         client = gearman.Client()
         client.add_servers('127.0.0.1:4730')
         client.do('jabber', base64.b64encode(bytes(json.dumps(data), 'utf-8')), background=True)
+        logger.info("Done.")
     except:
+        logger.info("Failed.")
         raise ValidationError
 
 
