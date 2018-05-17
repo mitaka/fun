@@ -9,7 +9,7 @@ django-summernote==0.6.3
 git+https://github.com/Lupino/py3k-gearman
 hiredis==0.2.0
 Pillow==2.8.1
-psycopg2==2.6
+psycopg2==2.7
 readline==6.2.4.1
 redis==2.10.3
 six==1.9.0
